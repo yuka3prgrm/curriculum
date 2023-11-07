@@ -24,7 +24,10 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    ECサイト
+                </a>
+                <a class="nav" href="{{ url('/') }}">
+                    <img class="nav_img" src="{{asset('image/sarch.png')}}" alt="検索" width="20" height="20">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -39,7 +42,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        @guest
+                        <!-- @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
@@ -66,7 +69,41 @@
                                     </form>
                                 </div>
                             </li>
-                        @endguest
+                        @endguest -->
+<!--ログイン （未完成）-->
+                        @if(Auth::check())
+                        <!--ログイン （管理者）-->
+                            @if(Auth::user()->authority_flg == 0)
+                                    管理者ページ
+                        <!--ログイン （管理者）-->
+                        <!--ログイン （一般）-->
+                            @else
+                                <span class="my-navbar-item">{{ Auth::user()->name }}</span>
+                                <!--カートの中身有無 -->
+                                    <a class="navbar-brand" href="{{ url('/') }}">
+                                        <img src="{{asset('image/.fullcart.png')}}" alt="カート"width="20" height="20">
+                                    </a>
+                                    <a class="navbar-brand" href="{{ url('/') }}">
+                                        <img src="{{asset('image/cart.png')}}" alt="カート"width="20" height="20">
+                                    </a>
+                                <!--カートの中身有無 -->
+                                <a class="navbar-brand" href="{{ url('/') }}">
+                                    <img src="{{asset('image/like.png')}}" alt="いいね"width="20" height="20">
+                                </a>
+                            @endif
+                        <!--ログイン （一般）-->
+                            @auth
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="my-navbar-item">ログアウト</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            @endauth
+<!--ログイン -->
+<!--未ログイン -->
+                        @else
+                            <a class="my-navbar-item" href="{{ route('login')}}">ログイン</a>
+                        @endif
+<!--未ログイン -->
                     </ul>
                 </div>
             </div>
