@@ -81,14 +81,14 @@
                                 <span class="my-navbar-item">{{ Auth::user()->name }}</span>
                                 <!--カートの中身有無 -->
                                     <a class="navbar-brand" href="{{ url('/') }}">
-                                        <img src="{{asset('image/.fullcart.png')}}" alt="カート"width="20" height="20">
+                                        <img src="{{asset('image/fullcart.png')}}" alt="カート"width="35" height="35">
                                     </a>
                                     <a class="navbar-brand" href="{{ url('/') }}">
-                                        <img src="{{asset('image/cart.png')}}" alt="カート"width="20" height="20">
+                                        <img src="{{asset('image/cart.png')}}" alt="カート"width="35" height="35">
                                     </a>
                                 <!--カートの中身有無 -->
                                 <a class="navbar-brand" href="{{ url('/') }}">
-                                    <img src="{{asset('image/like.png')}}" alt="いいね"width="20" height="20">
+                                    <img src="{{asset('image/like.png')}}" alt="いいね"width="30" height="30">
                                 </a>
                             @endif
                         <!--ログイン （一般）-->

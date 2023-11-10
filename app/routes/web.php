@@ -21,3 +21,11 @@ use App\Http\Controllers\RegistrationController;
 Auth::routes();
 
 Route::get('/', [DisplayController::class, "index"])->name('home');
+Route::get("/ownerpage",[DisplayController::class,"ownerPage"])->name("ownerpage");
+Route::get("/post_product",[RegistrationController::class,"postProduct"])->name("post_product");
+Route::post("/post_product",[RegistrationController::class,"createProduct"]);
+Route::get("/post_product_comp/{id}",[DisplayController::class,"postProductComp"])->name("post_product_comp");
+Route::get("/edit_product/{product}",[RegistrationController::class,"editProductForm"])->name("edit_product");
+Route::post("/edit_product/{product}",[RegistrationController::class,"editProduct"]);
+Route::get("/edit_product_comp",[DisplayController::class,"editProductComp"])->name("edit_product_comp");
+Route::get("/user_list",[DisplayController::class,"userList"])->name("user_list");
