@@ -19,26 +19,28 @@ class DisplayController extends Controller
         ]);
     }
 
-    public function ownerPage(Request $request){
+    public function ownerPage(){
         $user =Auth::User();
+        $product = new Product;
+        $all = $product->all()->toArray();
+
 
         return view("owners/ownerpage",[
-            "user"=>$user
+            "user"=> $user,
+            "products"=> $all
         ]);
     }
 
-    public function postProductComp(Request $request){
-        $productId = $request->get('product_id');
-        $product = Product::find($productId);
+    public function postProductComp(){
+        $product = Product::latest()->first();
 
         return view("owners/post_product_comp",[
             'product' => $product,
         ]);
     }
 
-    public function editProductComp(Request $request){
-        $productId = $request->get('product_id');
-        $product = Product::find($productId);
+    public function editProductComp(){
+        $product = Product::latest('updated_at')->first();
 
         return view("owners/edit_product_comp",[
             'product' => $product,

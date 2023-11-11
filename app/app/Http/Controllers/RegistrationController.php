@@ -37,13 +37,13 @@ class RegistrationController extends Controller
     public function editProductForm(Product $product){
 
         return view("owners/edit_product",[
-            "products"=>$product
+            "product"=>$product
         ]);
     }
 
-    public function editProduct(Product $product,CreateData $request){
+    public function editProduct(Product $product, Request $request){
 
-        $columns =["name","price","image","introduction","stock"];
+        $columns =["name","price","introduction","stock"];
         foreach($columns as $column){
             $product->$column = $request->$column;
         }

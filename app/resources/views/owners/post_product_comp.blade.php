@@ -3,7 +3,7 @@
 商品登録完了
 <div>
     <div>
-        <div><img src="{{ Storage::url($product->image) }}" alt="商品画像" width="100%" ></div>
+        <div><img src="{{ asset('storage/'.$product['image']) }}" alt="商品画像" width="100" height="150" ></div>
     </div>
     <div>
         <div>{{$product->name}}</div>
