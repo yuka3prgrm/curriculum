@@ -13,9 +13,11 @@ class DisplayController extends Controller
 {
     public function index(Request $request){
         $user =Auth::User();
+        $products = Product::latest()->take(4)->get();
 
         return view("home",[
-            "user"=>$user
+            "user"=>$user,
+            "products"=> $products
         ]);
     }
 
@@ -53,6 +55,31 @@ class DisplayController extends Controller
 
         return view("owners/user_list",[
             "users" => $all,
+        ]);
+    }
+
+    public function searchProduct(Request $request){
+        $user = new User;
+        $product = new Product;
+        $products = $product->all()->toArray();
+
+        return view("/search_product",[
+            "user"=>$user,
+            "products"=> $products
+        ]);
+    }
+
+    public function showProduct(Product $product){
+
+        return view("/show_product",[
+            "product"=>$product
+        ]);
+    }
+
+    public function postReviewConf(Product $product){
+
+        return view("/post_review_conf",[
+            "product"=>$product
         ]);
     }
 }

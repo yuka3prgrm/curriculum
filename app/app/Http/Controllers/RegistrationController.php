@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Product;
+use App\Review;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -53,5 +54,24 @@ class RegistrationController extends Controller
         return redirect("/edit_product_comp");
     }
 
+    public function postReviewForm(Product $product){
+
+        return view("/post_review",[
+            "product"=>$product
+        ]);
+    }
+
+    public function postReview(Request $request){
+        $review = new Review;
+
+        $columns =["title","comment"];
+        foreach($columns as $column){
+            $review->$column = $request->$column;
+        }
+
+        Auth::user()->product()->save($review);
+        
+        return redirect("/post_review_conf");
+    }
     
 }

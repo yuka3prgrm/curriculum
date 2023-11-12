@@ -18,7 +18,7 @@ class CreateAddressesTable extends Migration
             $table->string("fullname","20");
             $table->integer("tel");
             $table->integer("postal_code");
-            $table->integer("predecture_id");
+            $table->integer("prefecture_id");
             $table->string("city");
             $table->integer("house_number");
             $table->string("building_name");
