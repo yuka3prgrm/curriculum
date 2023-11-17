@@ -1,9 +1,12 @@
 @extends('layouts.app')
 @section('content')
-<div><img src="{{asset('storage/'.$product['image'])}}" alt="商品画像"width="300" height="500" ></div>
-<div>{{$product->name}}</div>
-<div>{{"レビュー投稿"}}</div>
-<form action="{{ route('post_review')}}" method="post" enctype="multipart/form-data">
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="pr-5"><img src="{{asset('storage/'.$product['image'])}}" alt="商品画像"width="80" height="160" ></div>
+        <div class="pl-5 h4">{{$product->name}}</div>
+    </div>
+<div class="text-center pt-5 h5">{{"レビュー投稿"}}</div>
+<form action="{{ route('post_review',['product' => $product['id']])}}" method="post" enctype="multipart/form-data">
     <div class="form-group row">
         <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('タイトル') }}</label>
 
@@ -32,5 +35,5 @@
         </div>
     </div>
 </form>
-
+</div>
 @endsection

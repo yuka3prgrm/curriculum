@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Product;
 use App\Review;
+use App\Order;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -70,8 +71,70 @@ class RegistrationController extends Controller
         }
 
         Auth::user()->product()->save($review);
-        
+
         return redirect("/post_review_conf");
+    }
+    
+    public function addCart(Product $product){
+        
+        $productId = $product->id;
+        $userId= Auth::user()->id;
+
+        $order = new Order;
+        $order ->amount =1;
+        $order ->status_id =0;
+        $order ->user_id =$userId;
+        $order ->product_id = $productId;
+
+        $order->save();
+
+        return redirect("/show_product");
+    }
+
+    public function cart(){
+        $order = new Order;
+        $orders = $order->orderBy('id', 'desc')->get()->toArray();
+
+        return view("/cart",[
+            "orders"=>$order
+        ]);
+    }
+
+    public function editUserForm(){
+        $user= Auth::user();
+
+        return view("/edit_user",[
+            "user"=>$user
+        ]);
+    }
+
+    public function editUser(User $user, Request $request){
+
+        $columns =["name","email","password"];
+        foreach($columns as $column){
+            $user->$column = $request->$column;
+        }
+        
+        $user->save();
+
+        return redirect("/edit_user_conf");
+    }
+
+    public function deleteUserForm(){
+        $user= Auth::user();
+
+        return view("/delete_user",[
+            "user"=>$user
+        ]);
+    }
+
+    public function deleteUser(User $user, Request $request){
+
+        $user->del_flg = 1;
+        
+        $user->save();
+
+        return redirect("/delete_user_comp");
     }
     
 }

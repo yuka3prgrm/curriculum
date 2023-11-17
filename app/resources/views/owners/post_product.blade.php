@@ -7,7 +7,7 @@
         <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('商品写真') }}</label>
 
         <div class="col-md-4">
-            <input id="image" type="file"  name="image" value="{{ old('image') }}" required autocomplete="image" autofocus>
+            <input id="image" type="file"  name="image" value="{{ old('image') }}" required autocomplete="image">
 
             @error('image')
                 <span class="invalid-feedback" role="alert">

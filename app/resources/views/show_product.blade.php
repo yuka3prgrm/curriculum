@@ -1,20 +1,40 @@
 @extends('layouts.app')
 @section('content')
-
-<div class="d-flex justify-content-around">
-    <div>
-        <div><img src="{{asset('storage/'.$product['image'])}}" alt="商品画像"width="300" height="500" ></div>
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="text-right mr-5"><img src="{{asset('storage/'.$product['image'])}}" alt="商品画像" width="200" height="400" ></div>
+        </div>
+        <div class="col-md-6">
+            <div class="pl-3">
+                <div class="mt-5 h4">{{$product->name}}</div>
+                <div class="d-flex mt-3  align-items-end">
+                    <div class="h2">￥{{$product->price}}</div>
+                    <div class="h5">　税込</div>
+                </div>
+                <form action="{{ route('add_cart',['product' => $product['id']])}}" method="post">
+                    @csrf
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-dark">
+                            {{ __('　　カートに入れる　　') }}
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-5 h5">アイテム説明</div>
+                <div class="h6">{{$product->introduction}}</div>
+            </div>
+        </div>
     </div>
     <div>
-        <div>{{$product->name}}</div>
-        <div>{{$product->price}}</div>
-        <div><a class="" href="#">カートに入れる</a></div>
-        <div>{{$product->introduction}}</div>
+    @foreach($reviews as $review)
+            @if($review["del_flg"] === 0)
+                <div>{{$review["title"]}}</div>
+                <div>{{$review["comment"]}}</div>
+            @endif
+        @endforeach
+    </div>
+    <div>
+        <a class="" href="{{ route('post_review',['product' => $product['id']]) }}"><button type="submit" class="btn btn-dark">レビューを書く</button></a>
     </div>
 </div>
-<div>
-    <div><a class="" href="{{ route('edit_product',['product' => $product['id']]) }}">再編集する</a></div>
-    <div><a class="" href="{{ route('ownerpage')}}">管理者ページへ戻る</a></div>
-</div>
-
 @endsection

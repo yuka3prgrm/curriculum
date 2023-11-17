@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Product;
 use App\User;
+use App\Review;
 
 class DisplayController extends Controller
 {
@@ -24,7 +25,7 @@ class DisplayController extends Controller
     public function ownerPage(){
         $user =Auth::User();
         $product = new Product;
-        $all = $product->all()->toArray();
+        $all = $product->orderBy('id', 'desc')->get()->toArray();
 
 
         return view("owners/ownerpage",[
@@ -61,7 +62,7 @@ class DisplayController extends Controller
     public function searchProduct(Request $request){
         $user = new User;
         $product = new Product;
-        $products = $product->all()->toArray();
+        $products = $product->orderBy('id', 'desc')->get()->toArray();
 
         return view("/search_product",[
             "user"=>$user,
@@ -70,9 +71,12 @@ class DisplayController extends Controller
     }
 
     public function showProduct(Product $product){
+        $review = new Review;
+        $all = $review->all()->toArray();
 
         return view("/show_product",[
-            "product"=>$product
+            "product"=>$product,
+            "reviews"=>$all
         ]);
     }
 
@@ -82,4 +86,20 @@ class DisplayController extends Controller
             "product"=>$product
         ]);
     }
+
+    public function myPage(){
+        $user =Auth::User();
+        
+        return view("/mypage",[
+            "user"=> $user,
+        ]);
+    }
+
+    public function deleteUserConf(User $user){
+
+        return view("/delete_user_conf",[
+            "user"=>$user
+        ]);
+    }
+
 }

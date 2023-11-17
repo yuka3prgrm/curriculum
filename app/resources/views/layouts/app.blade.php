@@ -78,7 +78,7 @@
                         <!--ログイン （管理者）-->
                         <!--ログイン （一般）-->
                             @else
-                                <span class="my-navbar-item">{{ Auth::user()->name }}</span>
+                                <span class="my-navbar-item"><a class="" href="{{ route('mypage',['user' => Auth::user()->id]) }}">{{ Auth::user()->name }}</a></span>
                                 <!--カートの中身有無 -->
                                     <a class="navbar-brand" href="{{ url('/') }}">
                                         <img src="{{asset('image/fullcart.png')}}" alt="カート"width="35" height="35">
