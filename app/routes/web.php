@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Password;
 
 Auth::routes();
 
-Route::get('/', [DisplayController::class, "index"])->name('home');
+Route::get('/', [DisplayController::class, "index"])->name('/');
 Route::get("/ownerpage",[DisplayController::class,"ownerPage"])->name("ownerpage");
 Route::get("/post_product",[RegistrationController::class,"postProduct"])->name("post_product");
 Route::post("/post_product",[RegistrationController::class,"createProduct"]);
@@ -39,10 +39,20 @@ Route::get("/post_review/{product}",[RegistrationController::class,"postReviewFo
 Route::post("/post_review/{product}",[RegistrationController::class,"postReview"]);
 Route::get("/post_review_conf/{product}",[DisplayController::class,"postReviewConf"])->name("post_review_conf");
 Route::post("/add_cart/{product}",[RegistrationController::class,"addCart"])->name("add_cart");
-Route::get("/cart/{order}",[RegistrationController::class,"cart"])->name("cart");
+Route::get("/cart",[DisplayController::class,"cart"])->name("cart");
+Route::post("/del_cart/{order}",[RegistrationController::class,"delCart"])->name("del_cart");
+Route::get("/post_address",[RegistrationController::class,"postAddressForm"])->name("post_address");
+Route::Post("/post_address",[RegistrationController::class,"postAddress"]);
+Route::get("/address",[DisplayController::class,"address"])->name("address");
+Route::post("/address",[RegistrationController::class,"buyCart"]);
+Route::get("/buy_cart_comp",[DisplayController::class,"buyCartComp"])->name("buy_cart_comp");
+Route::get("/empty_cart",[DisplayController::class,"emptyCart"])->name("empty_cart");
 
 Route::get("/mypage/{user}",[DisplayController::class,"myPage"])->name("mypage");
 Route::get("/edit_user/{user}",[RegistrationController::class,"editUserForm"])->name("edit_user");
 Route::post("/edit_user/{user}",[RegistrationController::class,"editUser"]);
 Route::get("/delete_user/{user}",[RegistrationController::class,"deleteUserForm"])->name("delete_user");
 Route::post("/delete_user/{user}",[RegistrationController::class,"deleteUser"]);
+Route::post("/add_like/{product}",[RegistrationController::class,"addLike"])->name("add_like");
+Route::get("/order_list",[DisplayController::class,"orderList"])->name("order_list");
+

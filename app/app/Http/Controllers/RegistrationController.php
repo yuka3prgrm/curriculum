@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Product;
+use App\User;
 use App\Review;
 use App\Order;
+use App\Like;
+use App\Address;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class RegistrationController extends Controller
 {
@@ -62,17 +66,19 @@ class RegistrationController extends Controller
         ]);
     }
 
-    public function postReview(Request $request){
+    public function postReview(Product $product, Request $request){
         $review = new Review;
+        $productId = $product->id;
+        $userId= Auth::user()->id;
 
-        $columns =["title","comment"];
-        foreach($columns as $column){
-            $review->$column = $request->$column;
-        }
+        $review ->title =$request->title;
+        $review ->comment = $request->comment;
+        $review ->user_id =$userId;
+        $review ->product_id = $productId;
+        
+        $review->save();
 
-        Auth::user()->product()->save($review);
-
-        return redirect("/post_review_conf");
+        return redirect()->route("post_review_conf", ['product' => $productId]);
     }
     
     public function addCart(Product $product){
@@ -88,16 +94,50 @@ class RegistrationController extends Controller
 
         $order->save();
 
-        return redirect("/show_product");
+        return redirect("/");
+        //Ajax使いたい
     }
 
-    public function cart(){
-        $order = new Order;
-        $orders = $order->orderBy('id', 'desc')->get()->toArray();
+    public function delCart(Order $order){
+        $userId= Auth::user()->id;
+        $order ->status_id =1;
+       
+        $order->save();
 
-        return view("/cart",[
-            "orders"=>$order
+        if(Auth::user()->orders()->where('status_id', 0)->count() >= 1){
+            return redirect()->route("cart", ['user' => $userId]);
+        }else{
+            return redirect("/empty_cart");
+        }
+    }
+
+    public function buyCart(){
+        $user =Auth::User();
+        Order::where('user_id', $user->id)
+        ->where('status_id', 0)
+        ->update(['status_id' => 2]);
+        
+            return redirect("/buy_cart_comp");
+    }
+
+    public function postAddressForm(){
+        $prefectures = Config::get('pref');
+
+        return view("addresses/post_address", compact('prefectures'),[
         ]);
+    }
+
+    public function postAddress(Request $request){
+        $address = new Address;
+
+        $columns =['fullname','tel','postal_code','prefecture_id','city','house_number','building_name'];
+        foreach($columns as $column){
+            $address->$column = $request->$column;
+        }
+        $address ->user_id =Auth::user()->id;
+        $address->save();
+
+        return redirect("/address");
     }
 
     public function editUserForm(){
@@ -137,4 +177,21 @@ class RegistrationController extends Controller
         return redirect("/delete_user_comp");
     }
     
+
+    public function addLike(Product $product){
+        
+        $productId = $product->id;
+        $userId= Auth::user()->id;
+
+        $like = new Like;
+        $like ->del_flg =0;
+        $like ->user_id =$userId;
+        $like ->product_id = $productId;
+
+        $like->save();
+
+        return redirect("/");
+        //Ajax使いたい
+    }
+
 }

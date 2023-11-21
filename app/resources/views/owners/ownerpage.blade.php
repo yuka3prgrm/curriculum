@@ -2,49 +2,51 @@
 @section('content')
 <div class="container">
 <div class="d-flex justify-content-around">
-    <div>
+    <div class="h4">
         {{"出品商品一覧"}}
     </div>
     <div class="d-flex justify-content-around">
         <div >
-            <a class="" href="{{ route('post_product')}}">{{"商品登録"}}</a>
+            <a class="" href="{{ route('post_product')}}">
+            <button type="submit" class="btn btn-dark">{{"商品登録"}}</button>
+            </a>
         </div>
         <div>
-            <a class="" href="{{ route('user_list')}}">{{"ユーザー確認"}}</a>
+            <a class="ml-3" href="{{ route('user_list')}}">
+            <button type="submit" class="btn btn-dark">{{"ユーザー確認"}}</button>
+            </a>
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-around">
-    <div>
-        <div>{{"価格"}}</div>
-        <div class="d-flex justify-content-around">
-            <div>{{"下限"}}</div>
-            <div>{{"～"}}</div>
-            <div>{{"上限"}}</div>
+<div class="card-body">
+    <form action="{{ route('ownerpage')}}" class="d-flex justify-content-end" method="GET">
+        @csrf
+        <div class="col-md-3">
+            <select class='form-control' name='limit' value="{{ $limit}}">
+                <option value='0' @if(old('limit', $limit) == 0) selected @endif>選択してください</option>
+                <option value='1' @if(old('limit', $limit) == 1) selected @endif>0 ~ 1000 円</option>
+                <option value='2' @if(old('limit', $limit) == 2) selected @endif>1000 ~ 3000 円</option>
+                <option value='3' @if(old('limit', $limit) == 3) selected @endif>3000 ~ 5000 円</option>
+                <option value='4' @if(old('limit', $limit) == 4) selected @endif>5000 ~ 10000 円</option>
+            </select>
         </div>
-    </div>
-    <div>
-        <div>{{"キーワード"}}</div>
-        <div class="d-flex justify-content-around">
-            <div>{{"商品名・説明文から探す"}}</div>
-            <div>{{"絞り込む"}}</div>
-        </div>
-    </div>
+        <div class="col-md-3"><input type='text' class='form-control' name='keyword' value="{{ $keyword}}"/></div>
+        <input type="submit" class="btn btn-dark" value="絞り込む">
+    </form>
 </div>
-<div class="row row-cols-4 mr-5 ml-5">
+
+<div class="row  row-cols-4 mr-5 ml-5 row-eq-height mb-5">
 @foreach($products as $product)
     @if(($product["del_flg"] === 0) && ($product["hidden_flg"]===0))
     <div class="col mb-4">
-        <div class="border border-secondary rounded">
+        <div class="bg-white shadow p-3  bg-body-tertiary rounded h-100 position-relative ">
             <a class="" href="{{ route('edit_product',['product' => $product['id']]) }}">
-                <div class="position-relative d-block mx-auto">
+                <div class="mx-auto">
                     <img class="d-block mx-auto" src="{{ asset('storage/'.$product['image']) }}" alt="商品画像" width="120" height="240" >
                 </div>
-                <div class="">
-                    <div class="ml-3">
-                        <div class="text-dark">{{$product["name"]}}</div>
-                        <div class="text-dark">{{$product["price"]}}円</div>
-                    </div>
+                <div class="ml-3 mb-4">
+                    <div class="text-dark">{{$product["name"]}}</div>
+                    <div class="text-dark">{{$product["price"]}}円</div>
                 </div>
             </a>
         </div>

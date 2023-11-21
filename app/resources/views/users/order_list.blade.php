@@ -6,7 +6,6 @@
     <div class="ml-5 h5">商品名</div>
     <div class="ml-5 h5">単価(税込)</div>
     <div class="ml-3 h5">注文数</div>
-    <div class="ml-3 h5">小計(税込)</div>
 </div>
 @foreach($orders as $order)
     <div class="col mb-4">
@@ -17,19 +16,22 @@
                 </div>
                 
                 <div class="text-dark">{{$order->product->price}}円</div>
-                <div class="text-dark col-md-1"><input type='text' class='form-control' name='$order["amount"]' value="{{ $order['amount']}}"/></div>
-                <div class="text-dark">円</div>
-                <div class="text-dark">
-                    <form action="{{ route('del_cart',['order' => $order['id']])}}" method="post">
-                    @csrf
-                        <button type="submit" class="btn btn-link d-block">削除</button>
+                <div class="text-dark">{{$order->amount}}</div>
+                <div>
+                    <form action="{{ route('add_cart',['product' => $order->product['id']])}}" method="post">
+                        @csrf
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-dark">
+                                {{ __('　　再購入　　') }}
+                            </button>
+                        </div>
                     </form>
+                    <div class="text-center">
+                        <a  href="{{ route('post_review',['product' => $order->product['id']]) }}"><button type="submit" class="btn btn-dark">レビューを書く</button></a>
+                    </div>
                 </div>
         </div>
     </div>
 @endforeach
-<div class="ml-3 h5">合計</div>
-<div><a class="" href="{{ route('search_product') }}"><button type="submit" class="btn btn-dark">{{ __('　　買い物を続ける　　') }}</button></a></div>
-<div><a class="" href="{{ route('address') }}"><button type="submit" class="btn btn-dark">{{ __('　　購入手続き　　') }}</button></a></div>
 </div>
 @endsection

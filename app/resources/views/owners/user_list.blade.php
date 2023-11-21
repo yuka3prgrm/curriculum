@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('content')
-ユーザー一覧
+<div class="container">
+    <div class="h4">
+        {{"ユーザー一覧"}}
+    </div>
+    <div class="card-body">
+        <form action="{{ route('user_list') }}" class="d-flex justify-content-end" method="GET">
+            <div class="col-md-5"><input type='text' class='form-control' name='keyword' value="{{ $keyword}}"/></div>
+            <input type="submit" class="btn btn-dark" value="絞り込む">
+        </form>
+    </div>
 <table class='table'>
     <tr>
         <th scope='col'>ユーザーID</th>
@@ -25,4 +34,5 @@
         </tr>
     @endforeach
 </table>
+</div>
 @endsection

@@ -25,16 +25,20 @@
             </div>
         </div>
     </div>
-    <div>
+    <div class="h4 mt-4 mb-4 text-center">この商品のレビュー</div>
+    <div class="row justify-content-center mt-3">
     @foreach($reviews as $review)
             @if($review["del_flg"] === 0)
-                <div>{{$review["title"]}}</div>
+            <div class="mb-3 col-md-7 border border-secondary rounded">
+                <div class="font-weight-bold mt-2">{{$review["title"]}}</div>
                 <div>{{$review["comment"]}}</div>
+                <div class="text-right mr-5 mb-2">投稿者：{{$review->user->name}}</div>
+            </div>
             @endif
         @endforeach
     </div>
-    <div>
-        <a class="" href="{{ route('post_review',['product' => $product['id']]) }}"><button type="submit" class="btn btn-dark">レビューを書く</button></a>
+    <div class="text-center">
+        <a  href="{{ route('post_review',['product' => $product['id']]) }}"><button type="submit" class="btn btn-dark">レビューを書く</button></a>
     </div>
 </div>
 @endsection

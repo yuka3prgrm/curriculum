@@ -26,23 +26,24 @@
     <div class="h4 ml-5 mt-4 mb-4">新着商品</div>
 
 
-    <div class="row row-cols-4 mr-5 ml-5">
+    <div class="row  row-cols-4 mr-5 ml-5 row-eq-height mb-5">
         @foreach($products as $product)
             @if(($product["del_flg"] === 0) && ($product["hidden_flg"]===0))
-            <div class="col mb-4">
-                <div class="border border-secondary rounded">
+            <div class="col mb-4 ">
+                <div class="bg-white shadow p-3  bg-body-tertiary rounded h-100 position-relative ">
                     <a class="" href="{{ route('show_product',['product' => $product['id']]) }}">
-                        <div class="position-relative d-block mx-auto">
+                        <div class="mx-auto">
                             <img class="d-block mx-auto" src="{{ asset('storage/'.$product['image']) }}" alt="商品画像" width="120" height="240" >
                         </div>
-                        <div class="">
-                            <div class="ml-3">
-                                <div class="text-dark">{{$product["name"]}}</div>
-                                <div class="text-dark">{{$product["price"]}}円</div>
-                            </div>
-                            <div class="text-right mr-3">
-                                <img  src="{{asset('image/likes.png')}}" alt="いいね" width="40" height="40">
-                            </div>
+                        <div class="ml-3 mb-4">
+                            <div class="text-dark">{{$product["name"]}}</div>
+                            <div class="text-dark">{{$product["price"]}}円</div>
+                        </div>
+                        <div class="position-absolute" style="bottom: 0; right: 0;">
+                            <form action="{{ route('add_like',['product' => $product['id']])}}" method="post">
+                            @csrf
+                                <button type="submit" class="btn btn-link d-block"><img  src="{{asset('image/likes.png')}}" alt="いいね" width="40" height="40"></button>
+                            </form>
                         </div>
                     </a>
                 </div>

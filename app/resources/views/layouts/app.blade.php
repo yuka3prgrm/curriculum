@@ -74,18 +74,21 @@
                         @if(Auth::check())
                         <!--ログイン （管理者）-->
                             @if(Auth::user()->authority_flg == 0)
-                                {{管理者ページ}}
+                                <div class="">{{管理者ページ}}</div>
                         <!--ログイン （管理者）-->
                         <!--ログイン （一般）-->
                             @else
-                                <span class="my-navbar-item"><a class="" href="{{ route('mypage',['user' => Auth::user()->id]) }}">{{ Auth::user()->name }}</a></span>
+                                <span class="my-navbar-item d-flex align-items-center"><a class="" href="{{ route('mypage',['user' => Auth::user()->id]) }}">{{ Auth::user()->name }}</a></span>
                                 <!--カートの中身有無 -->
-                                    <a class="navbar-brand" href="{{ url('/') }}">
+                                    @if(Auth::user()->orders()->where('status_id', 0)->count() >= 1)
+                                    <a class="navbar-brand" href="{{ route('cart') }}">
                                         <img src="{{asset('image/fullcart.png')}}" alt="カート"width="35" height="35">
                                     </a>
-                                    <a class="navbar-brand" href="{{ url('/') }}">
+                                    @else
+                                    <a class="navbar-brand" href="{{ route('empty_cart') }}">
                                         <img src="{{asset('image/cart.png')}}" alt="カート"width="35" height="35">
                                     </a>
+                                    @endif
                                 <!--カートの中身有無 -->
                                 <a class="navbar-brand" href="{{ url('/') }}">
                                     <img src="{{asset('image/like.png')}}" alt="いいね"width="30" height="30">
@@ -93,7 +96,7 @@
                             @endif
                         <!--ログイン （一般）-->
                             @auth
-                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="my-navbar-item">ログアウト</a>
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="my-navbar-item d-flex align-items-center">ログアウト</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
@@ -101,7 +104,9 @@
 <!--ログイン -->
 <!--未ログイン -->
                         @else
+                        <div clss="d-flex align-items-center">
                             <a class="my-navbar-item" href="{{ route('login')}}">ログイン</a>
+                        </div>
                         @endif
 <!--未ログイン -->
                     </ul>
