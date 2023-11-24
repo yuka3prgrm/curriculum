@@ -12,20 +12,32 @@ use App\Review;
 use App\Order;
 use App\Like;
 use App\Address;
+use Carbon\Carbon;
 
 class DisplayController extends Controller
 {
     public function index(Request $request){
+        if(Auth::check()){
+            if(Auth::user()->authority_flg == 0){
+                return redirect ("/ownerpage");
+            }
+        }
         $user =Auth::User();
-        $products = Product::latest()->take(4)->get();
+        $products = Product::latest()->take(4)->orderBy('id', 'desc')->get();
+        $like_model = new Like;
+
 
         return view("home",[
             "user"=>$user,
-            "products"=> $products
+            "products"=> $products,
+            'like_model'=>$like_model,
         ]);
     }
 
     public function ownerPage(Request $request){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
         $user =Auth::User();
         $product = new Product;
 
@@ -60,10 +72,11 @@ class DisplayController extends Controller
             $products->whereBetween('price', [$lower, $upper]);
         }
     
-        $products = $products->get()->toArray();
+        $products = $products->paginate(20);
 
 
         return view("owners/ownerpage",[
+            
             "user"=> $user,
             "products"=> $products,
             "limit" =>$limit,
@@ -72,6 +85,9 @@ class DisplayController extends Controller
     }
 
     public function postProductComp(){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
         $product = Product::latest()->first();
 
         return view("owners/post_product_comp",[
@@ -80,24 +96,36 @@ class DisplayController extends Controller
     }
 
     public function editProductComp(){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
         $product = Product::latest('updated_at')->first();
+        if($product->hidden_flg == 0){
+            $status ="商品公開中";
+        }else {
+            $status ="公開停止中";
+        }
 
         return view("owners/edit_product_comp",[
             'product' => $product,
+            'status' => $status
         ]);
     }
 
     public function userList(Request $request){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
         $user = new User;
 
         $keyword = $request->input('keyword');
         if(!empty($keyword)) {
-            $users = $user->where('name','LIKE',"%{$keyword}%")->get()->toArray();
+            $users = $user->where('name','LIKE',"%{$keyword}%")->get()->paginate(20);
             if(empty($users)) {
                 $users = ("一致するユーザーがありません");
             }
         } else {
-            $users = $user->all()->toArray();
+            $users = $user->paginate(5);
         }
 
         return view("owners/user_list",[
@@ -106,9 +134,37 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function ownerOrderList(Request $request){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
+        $orders = Order::where('status_id', 2)->paginate(50);
+        // $keyword = $request->input('keyword');
+        // if(!empty($keyword)) {
+        //     $orders = $order->where('name','LIKE',"%{$keyword}%")->get()->paginate(20);
+        //     if(empty($orders)) {
+        //         $orders = ("一致するユーザーがありません");
+        //     }
+        // } else {
+        //     $orders = $order->paginate(5);
+        // }
+
+        return view("owners/owner_order_list",[
+            "orders" => $orders,
+            // "keyword" =>$keyword
+        ]);
+    }
+
+
     public function searchProduct(Request $request){
+        if(Auth::check()){
+            if(Auth::user()->authority_flg == 0){
+                return redirect ("/ownerpage");
+            }
+        }
         $user = new User;
         $product = new Product;
+        $like_model = new Like;
         
         $limit = $request->input('limit');
         $keyword = $request->input('keyword');
@@ -141,17 +197,23 @@ class DisplayController extends Controller
             $products->whereBetween('price', [$lower, $upper]);
         }
     
-        $products = $products->get()->toArray();
+        $products = $products->paginate(20);
 
         return view("/search_product",[
             "user"=>$user,
             "products"=> $products,
             "limit" =>$limit,
-            "keyword" =>$keyword
+            "keyword" =>$keyword,
+            'like_model'=>$like_model
         ]);
     }
 
     public function showProduct(Product $product){
+        if(Auth::check()){
+            if(Auth::user()->authority_flg == 0){
+                return redirect ("/ownerpage");
+            }
+        }
         $reviews = Review::with("user")->get();
 
         return view("/show_product",[
@@ -162,6 +224,9 @@ class DisplayController extends Controller
     }
 
     public function postReviewConf(Product $product){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
 
         return view("/post_review_conf",[
             "product"=>$product
@@ -169,6 +234,9 @@ class DisplayController extends Controller
     }
 
     public function cart(){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
         $user =Auth::User();
         $orders = Order::with(["user","product"])->where('user_id', $user->id)->where('status_id', 0)->orderBy('id', 'desc')->get();
 
@@ -178,6 +246,9 @@ class DisplayController extends Controller
     }
 
     public function emptyCart(){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
 
         return view("/empty_cart",[
             
@@ -185,18 +256,28 @@ class DisplayController extends Controller
     }
 
     public function address(){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
+
         $user =Auth::User();
         $address = Address::with("user")->where('user_id', $user->id)->latest("id")->first();
         if(empty($address)){
             return redirect("/post_address");
         }
+        $orders = Order::with(["user","product"])->where('user_id', $user->id)->where('status_id', 0)->orderBy('id', 'desc')->get();
+
 
         return view("addresses/address",[
-            "address"=> $address
+            "address"=> $address,
+            "orders" =>$orders
         ]);
     }
 
     public function buyCartComp(Product $product){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
 
         return view("/buy_cart_comp",[
             
@@ -204,17 +285,23 @@ class DisplayController extends Controller
     }
 
     public function myPage(){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
+
         $user =Auth::User();
         $likes = Like::with(["user","product"])->get();
-
         
         return view("users/mypage",[
             "user"=> $user,
-            "likes"=>$likes
+            "likes"=>$likes,
         ]);
     }
 
     public function deleteUserConf(User $user){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
 
         return view("/delete_user_conf",[
             "user"=>$user
@@ -222,11 +309,15 @@ class DisplayController extends Controller
     }
 
     public function orderList(){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
+        
         $user =Auth::User();
         $orders = Order::with(["user","product"])->where('user_id', $user->id)->where('status_id', 2)->orderBy('id', 'desc')->get();
-
+        
         return view("users/order_list",[
-            "orders"=>$orders
+            "orders"=>$orders,
         ]);
     }
 }

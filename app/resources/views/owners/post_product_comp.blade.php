@@ -15,7 +15,7 @@
                 </div>
                 <div class="mt-4 h4">在庫数　　{{$product->stock}}個</div>
                 <div class="mt-5 h5">アイテム説明</div>
-                <div class="h6">{{$product->introduction}}</div>
+                <div class="h6 col-md-8">{{$product->introduction}}</div>
             </div>
         </div>
     </div>

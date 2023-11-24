@@ -1,5 +1,11 @@
-@extends('errors::minimal')
-
-@section('title', __('Too Many Requests'))
-@section('code', '429')
-@section('message', __('Too Many Requests'))
+@extends('layouts.app')
+@section('content')
+<div class="container">
+    <div class="h4 text-center mt-5">不正なアクセスです</div>
+    <div class="text-center mt-5">
+      <a href="{{ url('/') }}">
+          <button type="submit" class="btn btn-dark">トップページへ戻る</button>
+      </a>
+    </div>
+</div>
+@endsection

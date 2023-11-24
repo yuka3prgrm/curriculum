@@ -17,19 +17,35 @@
                 </div>
                 
                 <div class="text-dark">{{$order->product->price}}円</div>
-                <div class="text-dark col-md-1"><input type='text' class='form-control' name='$order["amount"]' value="{{ $order['amount']}}"/></div>
-                <div class="text-dark">円</div>
-                <div class="text-dark">
+                <div class="text-dark">{{$order["amount"]}}</div>
+                <div class="text-dark" id="subtotal">{{($order->product->price)*($order["amount"]) }}円</div>
+                <div class="text-dark mr-3">
                     <form action="{{ route('del_cart',['order' => $order['id']])}}" method="post">
                     @csrf
-                        <button type="submit" class="btn btn-link d-block">削除</button>
+                        <button type="submit" class="btn btn-dark">削除</button>
                     </form>
                 </div>
         </div>
     </div>
 @endforeach
-<div class="ml-3 h5">合計</div>
-<div><a class="" href="{{ route('search_product') }}"><button type="submit" class="btn btn-dark">{{ __('　　買い物を続ける　　') }}</button></a></div>
-<div><a class="" href="{{ route('address') }}"><button type="submit" class="btn btn-dark">{{ __('　　購入手続き　　') }}</button></a></div>
+<?php
+$subtotal=0;
+foreach($orders as $order){
+     $subtotal = $subtotal + (($order->product->price)*($order["amount"]));
+}
+?>
+<div class="ml-3 h4 d-flex justify-content-around">
+    <div class="ml-5 h4 d-flex align-items-center">合計
+        <div>
+            {{$subtotal}}
+        </div>円
+    </div>
+        <div class="d-flex align-items-center">
+            <div><a class="" href="{{ route('search_product') }}"><button type="submit" class="btn btn-dark">{{ __('　　買い物を続ける　　') }}</button></a></div>
+            <div><a class="ml-3" href="{{ route('address') }}"><button type="submit" class="btn btn-dark">{{ __('　　購入手続き　　') }}</button></a></div>
+        </div>
+    </div>
 </div>
+
+
 @endsection

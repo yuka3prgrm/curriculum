@@ -12,16 +12,25 @@
                     <div class="h2">￥{{$product->price}}</div>
                     <div class="h5">　税込</div>
                 </div>
+                @if($product->orders->sum('amount') < $product->stock) 
                 <form action="{{ route('add_cart',['product' => $product['id']])}}" method="post">
                     @csrf
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-dark">
-                            {{ __('　　カートに入れる　　') }}
+                    <div class="mt-4 d-flex">
+                        <div class="col-md-2">
+                            <input type='text' class='form-control' name="amount" value="1"/>
+                        </div>
+                        <button type="submit" class="ml-5 btn btn-dark">
+                            {{ ('　　カートに入れる　　') }}
                         </button>
                     </div>
                 </form>
+                @else
+                <button type="submit" class="ml-5 mt-4 btn btn-dark">
+                    {{ __('　　　SOLD OUT　　　') }}
+                </button>
+                @endif
                 <div class="mt-5 h5">アイテム説明</div>
-                <div class="h6">{{$product->introduction}}</div>
+                <div class="h6 col-md-8">{{$product->introduction}}</div>
             </div>
         </div>
     </div>

@@ -34,5 +34,7 @@
         </tr>
     @endforeach
 </table>
+<div class="d-flex justify-content-center">{{ $users->links() }}</div>
+<div class="text-right"><a class="ml-3" href="{{ route('ownerpage')}}"><button type="submit" class="btn btn-dark">管理者ページへ戻る</button></a></div>
 </div>
 @endsection

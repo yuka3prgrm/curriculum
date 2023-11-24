@@ -64,7 +64,7 @@ class ProductsTableSeeder extends Seeder
         ],
     ];
     foreach($params as $param){
-        DB::table("types")->insert($param);
+        DB::table("products")->insert($param);
     }
     }
 }

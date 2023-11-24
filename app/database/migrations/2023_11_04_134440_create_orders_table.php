@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger("status_id")->default(0);
             $table->integer("user_id");
             $table->integer("product_id");
+            $table->integer("address_id")->nullable();
             $table->timestamps();
         });
     }

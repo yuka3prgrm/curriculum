@@ -1,5 +1,11 @@
 @extends('layouts.app')
 @section('content')
+<?php
+$subtotal=0;
+foreach($orders as $order){
+     $subtotal = $subtotal + (($order->product->price)*($order["amount"]));
+}
+?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -19,27 +25,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-4 text-md-right">{{ __('都道府県:') }}</div>
+                        <div class="col-md-4 text-md-right">{{ __('住所:') }}</div>
                             <div class="col-md-6 border-bottom">
-                                <div class="">{{$address->prefecture_id}}</div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-4 text-md-right">{{ __('市:') }}</div>
-                            <div class="col-md-6 border-bottom">
-                                <div class="">{{$address->city}}</div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-4 text-md-right">{{ __('番地:') }}</div>
-                            <div class="col-md-6 border-bottom">
-                                <div class="">{{$address->house_number}}</div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-4 text-md-right">{{ __('建物名:') }}</div>
-                            <div class="col-md-6 border-bottom">
-                                <div class="">{{$address->building_name}}</div>
+                                <div class="">{{$address->place}}</div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -50,18 +38,42 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <div class="text-right"><a class="" href="{{ route('post_address')}}">▶▶お届け先変更</a></div>
+            </div>
         </div>
     </div>
-    <div class="d-flex justify-content-between">
-    </div>
-    <form action="{{ route('address')}}" method="post">
-        @csrf
-        <div class="mt-4">
-            <button type="submit" class="btn btn-dark">
-                {{ __('　　ご注文内容確定へ　　') }}
-            </button>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-end">
+                <div class="col-md-8">
+                @foreach($orders as $order)
+                    <div class="mt-2 bg-white">
+                            <div class="d-flex justify-content-between align-items-center ml-4">
+                                <img class="d-block" src="{{ asset('storage/'.$order->product['image']) }}" alt="商品画像" width="80" height="160" >
+                                <div class="text-dark">{{$order->product->name}}</div>
+                                <div class="text-dark mr-3">{{$order->amount}}</div>
+                            </div>
+                    </div>
+                @endforeach
+                </div>
+                <div class="h4" >
+                    <div class=" mb-3 h4 ">
+                        <div class="d-flex ">合計<p>{{$subtotal}}</p>円</div>
+                    </div>
+                    <form action="{{ route('address')}}" method="post">
+                        @csrf
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-dark">
+                                {{ __('　　ご注文内容確定へ　　') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
+
 </div>
 
 @endsection

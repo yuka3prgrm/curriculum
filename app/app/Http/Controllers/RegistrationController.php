@@ -18,6 +18,9 @@ class RegistrationController extends Controller
 {
     //管理者ページ
     public function postProduct(){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
 
         return view("owners/post_product",[
             
@@ -25,6 +28,10 @@ class RegistrationController extends Controller
     }
 
     public function createProduct(Request $request){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
+
         $product = new Product;
 
         $img = $request->file('image');
@@ -37,10 +44,13 @@ class RegistrationController extends Controller
 
         $product->save();
 
-        return redirect("/post_product_comp");
+        return redirect("owners/post_product_comp");
     }
 
     public function editProductForm(Product $product){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
 
         return view("owners/edit_product",[
             "product"=>$product
@@ -48,6 +58,9 @@ class RegistrationController extends Controller
     }
 
     public function editProduct(Product $product, Request $request){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
 
         $columns =["name","price","introduction","stock"];
         foreach($columns as $column){
@@ -58,8 +71,46 @@ class RegistrationController extends Controller
 
         return redirect("/edit_product_comp");
     }
+    public function hiddenProduct(Product $product, Request $request){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
+
+        $product->hidden_flg = 1;
+        
+        $product->save();
+
+        return redirect("/edit_product_comp");
+    }
+
+    public function hiddenProduct2(Product $product, Request $request){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
+
+        $product->hidden_flg = 0;
+        
+        $product->save();
+
+        return redirect("/edit_product_comp");
+    }
+
+    public function deleteProduct(Product $product, Request $request){
+        if(Auth::user()->authority_flg == 1){
+            return redirect ("/");
+        }
+
+        $product->$del_flg = 1;
+
+        $product->save();
+
+        return redirect("/edit_product_comp");
+    }
 
     public function postReviewForm(Product $product){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
 
         return view("/post_review",[
             "product"=>$product
@@ -67,6 +118,10 @@ class RegistrationController extends Controller
     }
 
     public function postReview(Product $product, Request $request){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
+
         $review = new Review;
         $productId = $product->id;
         $userId= Auth::user()->id;
@@ -81,24 +136,30 @@ class RegistrationController extends Controller
         return redirect()->route("post_review_conf", ['product' => $productId]);
     }
     
-    public function addCart(Product $product){
+    public function addCart(Product $product, Request $request){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
         
         $productId = $product->id;
         $userId= Auth::user()->id;
 
         $order = new Order;
-        $order ->amount =1;
+        $order ->amount =$request-> amount;
         $order ->status_id =0;
         $order ->user_id =$userId;
         $order ->product_id = $productId;
 
         $order->save();
 
-        return redirect("/");
-        //Ajax使いたい
+        return redirect()->route("show_product", ['product' => $productId]);
     }
 
     public function delCart(Order $order){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
+
         $userId= Auth::user()->id;
         $order ->status_id =1;
        
@@ -112,25 +173,40 @@ class RegistrationController extends Controller
     }
 
     public function buyCart(){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
         $user =Auth::User();
+        $address = Address::with("user")->where('user_id', $user->id)->latest("id")->first();
         Order::where('user_id', $user->id)
         ->where('status_id', 0)
-        ->update(['status_id' => 2]);
+        ->update(['status_id' => 2,'address_id'=>$address->id]);
+        // $orders = Order::where('user_id', $user->id)->where('status_id', 0);
+        // foreach($orders as $order){
+        //     $order->status_id = 2;
+        //     $order->address_id = $address->id;
+        //     $order->save();
+        // }
         
             return redirect("/buy_cart_comp");
     }
 
     public function postAddressForm(){
-        $prefectures = Config::get('pref');
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
 
-        return view("addresses/post_address", compact('prefectures'),[
+        return view("addresses/post_address",[
         ]);
     }
 
     public function postAddress(Request $request){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
         $address = new Address;
 
-        $columns =['fullname','tel','postal_code','prefecture_id','city','house_number','building_name'];
+        $columns =['fullname','tel','postal_code','place'];
         foreach($columns as $column){
             $address->$column = $request->$column;
         }
@@ -141,6 +217,9 @@ class RegistrationController extends Controller
     }
 
     public function editUserForm(){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
         $user= Auth::user();
 
         return view("/edit_user",[
@@ -149,6 +228,9 @@ class RegistrationController extends Controller
     }
 
     public function editUser(User $user, Request $request){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
 
         $columns =["name","email","password"];
         foreach($columns as $column){
@@ -161,6 +243,9 @@ class RegistrationController extends Controller
     }
 
     public function deleteUserForm(){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
         $user= Auth::user();
 
         return view("/delete_user",[
@@ -169,6 +254,9 @@ class RegistrationController extends Controller
     }
 
     public function deleteUser(User $user, Request $request){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
 
         $user->del_flg = 1;
         
@@ -178,20 +266,41 @@ class RegistrationController extends Controller
     }
     
 
-    public function addLike(Product $product){
+    public function addLike(Request $request){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
+        $product_id = $request->product_id;
+        $userId = Auth::user()->id;
         
-        $productId = $product->id;
-        $userId= Auth::user()->id;
-
         $like = new Like;
-        $like ->del_flg =0;
-        $like ->user_id =$userId;
-        $like ->product_id = $productId;
+        $product = Product::findOrFail($product_id);
 
-        $like->save();
+        // 空でない（既にいいねしている）なら
+        if ($like->like_exist($userId, $product_id)) {
+            //likesテーブルのレコードを削除
+            $like = Like::where('product_id', $product_id)->where('user_id', $userId)->delete();
+            $status = 'unliked';
+        } else {
+            //空（まだ「いいね」していない）ならlikesテーブルに新しいレコードを作成する
+            $like = new Like;
+            $like->user_id = $userId;
+            $like->product_id = $product_id;
+            $like->save();
+            $status = 'liked';
+        }
+       
+            return response()->json(['status' => $status]);
+    }
 
-        return redirect("/");
-        //Ajax使いたい
+    public function deleteLike(Like $like){
+        if(Auth::user()->authority_flg == 0){
+            return redirect ("/ownerpage");
+        }
+        $userId = Auth::user()->id;
+        $like->delete();
+       
+        return redirect()->route("mypage", ['user' => $userId]);
     }
 
 }

@@ -27,7 +27,7 @@
                             <label for="postal_code" class="col-md-4 col-form-label text-md-right">{{ __('郵便番号') }}</label>
 
                             <div class="col-md-6">
-                                <input id="postal_code" type="text" class="form-control @error('postal_code') is-invalid @enderror" name="postal_code" value="{{ old('') }}" required autocomplete="postal_code">
+                                <input id="postal_code" type="text" class="form-control @error('postal_code') is-invalid @enderror" name="postal_code" value="{{ old('postal_code') }}" required autocomplete="postal_code">
 
                                 @error('postal_code')
                                     <span class="invalid-feedback" role="alert">
@@ -38,13 +38,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="prefecture_id" class="col-md-4 col-form-label text-md-right">{{ __('都道府県') }}</label>
+                            <label for="place" class="col-md-4 col-form-label text-md-right">{{ __('住所') }}</label>
 
                             <div class="col-md-6">
-                            <select class="form-control" name="prefecture_id">
-                            </select>
-
-                                @error('prefecture_id')
+                            <input id="place" type="text" class="form-control @error('place') is-invalid @enderror" name="place" value="{{ old('place') }}" required autocomplete="place">
+                                @error('place')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -52,47 +50,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="city" class="col-md-4 col-form-label text-md-right">{{ __('市') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="city" type="text" class="form-control @error('city') is-invalid @enderror" name="city" required autocomplete="city">
-
-                                @error('city')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="house_number" class="col-md-4 col-form-label text-md-right">{{ __('番地') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="house_number" type="text" class="form-control @error('house_number') is-invalid @enderror" name="house_number" required autocomplete="house_number">
-
-                                @error('house_number')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="building_name" class="col-md-4 col-form-label text-md-right">{{ __('建物名') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="building_name" type="text" class="form-control @error('building_name') is-invalid @enderror" name="building_name" required autocomplete="building_name">
-
-                                @error('building_name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
 
                         <div class="form-group row">
                             <label for="tel" class="col-md-4 col-form-label text-md-right">{{ __('電話番号') }}</label>
