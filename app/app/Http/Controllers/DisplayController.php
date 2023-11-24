@@ -59,7 +59,7 @@ class DisplayController extends Controller
             $upper =10000;
         }
 
-        $products = $product->orderBy('id', 'desc');
+        $products = $product->where('del_flg', 0)->orderBy('id', 'desc');
 
         if (!empty($keyword)) {
             $products->where(function ($query) use ($keyword) {
@@ -72,7 +72,7 @@ class DisplayController extends Controller
             $products->whereBetween('price', [$lower, $upper]);
         }
     
-        $products = $products->paginate(20);
+        $products = $products->paginate(8);
 
 
         return view("owners/ownerpage",[
@@ -116,21 +116,34 @@ class DisplayController extends Controller
         if(Auth::user()->authority_flg == 1){
             return redirect ("/");
         }
-        $user = new User;
+        $users = User::query();
 
+        $sort = $request->input('sort');
         $keyword = $request->input('keyword');
-        if(!empty($keyword)) {
-            $users = $user->where('name','LIKE',"%{$keyword}%")->get()->paginate(20);
-            if(empty($users)) {
-                $users = ("一致するユーザーがありません");
-            }
-        } else {
-            $users = $user->paginate(5);
+        if($sort == 1){
+            $users =$users->orderBy('id', 'desc');
+        }elseif($sort ==2){
+            $users =$users->orderBy('updated_at', 'asc');
+        }elseif($sort ==3){
+            $users =$users->orderBy('updated_at', 'desc');
+        }elseif($sort ==4){
+            $users =$users->orderBy('del_flg', 'asc');
+        }elseif($sort ==5){
+            $users =$users->orderBy('del_flg', 'desc');
         }
+
+        if(!empty($keyword)) {
+            $users->where('name','LIKE',"%{$keyword}%");
+        } 
+        if(empty($users)) {
+            $users = ("一致するユーザーがありません");
+        }
+        $users = $users->paginate(10);
 
         return view("owners/user_list",[
             "users" => $users,
-            "keyword" =>$keyword
+            "keyword" =>$keyword,
+            "sort" =>$sort
         ]);
     }
 
@@ -139,15 +152,6 @@ class DisplayController extends Controller
             return redirect ("/");
         }
         $orders = Order::where('status_id', 2)->paginate(50);
-        // $keyword = $request->input('keyword');
-        // if(!empty($keyword)) {
-        //     $orders = $order->where('name','LIKE',"%{$keyword}%")->get()->paginate(20);
-        //     if(empty($orders)) {
-        //         $orders = ("一致するユーザーがありません");
-        //     }
-        // } else {
-        //     $orders = $order->paginate(5);
-        // }
 
         return view("owners/owner_order_list",[
             "orders" => $orders,
@@ -197,7 +201,7 @@ class DisplayController extends Controller
             $products->whereBetween('price', [$lower, $upper]);
         }
     
-        $products = $products->paginate(20);
+        $products = $products->paginate(8);
 
         return view("/search_product",[
             "user"=>$user,
@@ -214,7 +218,7 @@ class DisplayController extends Controller
                 return redirect ("/ownerpage");
             }
         }
-        $reviews = Review::with("user")->get();
+        $reviews = Review::with("product")->where('product_id', $product->id)->get();
 
         return view("/show_product",[
             "product"=>$product,
@@ -290,7 +294,7 @@ class DisplayController extends Controller
         }
 
         $user =Auth::User();
-        $likes = Like::with(["user","product"])->get();
+        $likes = Like::with(["user","product"])->where('user_id', $user->id)->get();
         
         return view("users/mypage",[
             "user"=> $user,
@@ -298,15 +302,16 @@ class DisplayController extends Controller
         ]);
     }
 
-    public function deleteUserConf(User $user){
+    public function editUserConf(){
         if(Auth::user()->authority_flg == 0){
             return redirect ("/ownerpage");
         }
-
-        return view("/delete_user_conf",[
+        $user =Auth::User();
+        return view("users/edit_user_conf",[
             "user"=>$user
         ]);
     }
+
 
     public function orderList(){
         if(Auth::user()->authority_flg == 0){

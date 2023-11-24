@@ -44,7 +44,7 @@ class RegistrationController extends Controller
 
         $product->save();
 
-        return redirect("owners/post_product_comp");
+        return redirect("/post_product_comp");
     }
 
     public function editProductForm(Product $product){
@@ -83,7 +83,7 @@ class RegistrationController extends Controller
         return redirect("/edit_product_comp");
     }
 
-    public function hiddenProduct2(Product $product, Request $request){
+    public function hiddenProduct2(Product $product){
         if(Auth::user()->authority_flg == 1){
             return redirect ("/");
         }
@@ -95,16 +95,16 @@ class RegistrationController extends Controller
         return redirect("/edit_product_comp");
     }
 
-    public function deleteProduct(Product $product, Request $request){
+    public function deleteProduct(Product $product){
         if(Auth::user()->authority_flg == 1){
             return redirect ("/");
         }
 
-        $product->$del_flg = 1;
+        $product->del_flg = 1;
 
         $product->save();
 
-        return redirect("/edit_product_comp");
+        return redirect("/ownerpage");
     }
 
     public function postReviewForm(Product $product){
@@ -222,7 +222,7 @@ class RegistrationController extends Controller
         }
         $user= Auth::user();
 
-        return view("/edit_user",[
+        return view("users/edit_user",[
             "user"=>$user
         ]);
     }
@@ -248,7 +248,7 @@ class RegistrationController extends Controller
         }
         $user= Auth::user();
 
-        return view("/delete_user",[
+        return view("users/delete_user",[
             "user"=>$user
         ]);
     }
@@ -261,8 +261,9 @@ class RegistrationController extends Controller
         $user->del_flg = 1;
         
         $user->save();
+        Auth::logout();
 
-        return redirect("/delete_user_comp");
+        return redirect("/login");
     }
     
 

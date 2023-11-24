@@ -75,8 +75,9 @@
         @endif
     @endif
 @endforeach
-{{ $products->links() }}
+
 
 </div>
+<div class="d-flex justify-content-center">{{ $products->appends(['keyword' => $keyword, 'limit' => $limit])->links() }}</div>
 </div>
 @endsection

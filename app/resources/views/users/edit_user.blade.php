@@ -13,7 +13,7 @@
                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('ユーザー名') }}</label>
 
                         <div class="col-md-6">
-                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $user->name }}" required autocomplete="name" autofocus>
 
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
@@ -27,7 +27,7 @@
                         <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('メールアドレス') }}</label>
 
                         <div class="col-md-6">
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $user->email }}" required autocomplete="email">
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -41,7 +41,7 @@
                         <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('パスワード') }}</label>
 
                         <div class="col-md-6">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ $user->password }}" required autocomplete="new-password">
 
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -55,7 +55,7 @@
                         <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('パスワード再入力') }}</label>
 
                         <div class="col-md-6">
-                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" value="{{ $user->password }}" required autocomplete="new-password">
                         </div>
                     </div>
                     <div class="d-flex justify-content-center">
@@ -65,16 +65,16 @@
                                     {{ __('　　編集内容確認　　') }}
                                 </button>
                             </div>
-                            <div class="">
-                                <a class="" href="{{ route('ownerpage')}}">
-                                    <button type="submit" class="btn btn-dark">
-                                        {{ __('　　退会する　　') }}
-                                    </button>
-                                </a>
-                            </div>
                         </div>
                     </div>
-                </form>
+                    </form>
+                    <div class="text-right">
+                        <a class="" href="{{ route('delete_user',['user' => Auth::user()->id])}}">
+                            <button type="submit" class="btn btn-link">
+                                {{ __('　　▶▶退会する　　') }}
+                            </button>
+                        </a>
+                    </div>
             </div>
         </div>
     </div>

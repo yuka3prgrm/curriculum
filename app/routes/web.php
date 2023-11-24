@@ -44,8 +44,10 @@ Route::group(["middleware" => "auth"],function(){
     Route::get("/mypage/{user}",[DisplayController::class,"myPage"])->name("mypage");
     Route::get("/edit_user/{user}",[RegistrationController::class,"editUserForm"])->name("edit_user");
     Route::post("/edit_user/{user}",[RegistrationController::class,"editUser"]);
+    Route::get("/edit_user_conf",[DisplayController::class,"editUserConf"])->name("edit_user_conf");
     Route::get("/delete_user/{user}",[RegistrationController::class,"deleteUserForm"])->name("delete_user");
     Route::post("/delete_user/{user}",[RegistrationController::class,"deleteUser"]);
+    Route::get("/delete_user_conf",[DisplayController::class,"editUserConf"])->name("delete_user_conf");
     Route::get("/order_list",[DisplayController::class,"orderList"])->name("order_list");
     Route::post("/add_like",[RegistrationController::class,"addLike"])->name("add_like");
     Route::post("/delete_like/{like}",[RegistrationController::class,"deleteLike"])->name("delete_like");

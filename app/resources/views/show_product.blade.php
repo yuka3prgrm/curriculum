@@ -38,7 +38,7 @@
     <div class="row justify-content-center mt-3">
     @foreach($reviews as $review)
             @if($review["del_flg"] === 0)
-            <div class="mb-3 col-md-7 border border-secondary rounded">
+            <div class="mb-3 col-md-7 bg-white border border-secondary rounded">
                 <div class="font-weight-bold mt-2">{{$review["title"]}}</div>
                 <div>{{$review["comment"]}}</div>
                 <div class="text-right mr-5 mb-2">投稿者：{{$review->user->name}}</div>

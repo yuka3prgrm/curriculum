@@ -25,15 +25,6 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 "authority_flg"     => 1,
-                "name"       => "購入者",
-                "email"    => "customer@com",
-                "password"       => "customer123",
-                "del_flg"     => 0,
-                "created_at" => Carbon::now(),
-                "updated_at" => Carbon::now(),
-            ],
-            [
-                "authority_flg"     => 1,
                 "name"       => "ユーザー2",
                 "email"    => "users2@user",
                 "password"       => "user123",
@@ -89,7 +80,7 @@ class UsersTableSeeder extends Seeder
             [
                 "authority_flg"     => 1,
                 "name"       => "ユーザー8",
-                "email"    => "users@user8",
+                "email"    => "users8@user",
                 "password"       => "user123",
                 "del_flg"     => 0,
                 "created_at" => Carbon::now(),
@@ -98,7 +89,7 @@ class UsersTableSeeder extends Seeder
             [
                 "authority_flg"     => 1,
                 "name"       => "ユーザー9",
-                "email"    => "users@user9",
+                "email"    => "users9@user",
                 "password"       => "user123",
                 "del_flg"     => 0,
                 "created_at" => Carbon::now(),
@@ -107,7 +98,7 @@ class UsersTableSeeder extends Seeder
             [
                 "authority_flg"     => 1,
                 "name"       => "ユーザー10",
-                "email"    => "users@user10",
+                "email"    => "users10@user",
                 "password"       => "user123",
                 "del_flg"     => 0,
                 "created_at" => Carbon::now(),
