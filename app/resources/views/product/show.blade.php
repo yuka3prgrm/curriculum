@@ -3,7 +3,7 @@
 <div class="container">
     <div class="d-flex justify-content-center">
         <div class="col-md-6">
-            <div class="text-right mr-5"><img src="{{asset('storage/'.$product['image'])}}" alt="商品画像" width="200" height="400" ></div>
+            <div class="text-right mr-5"><img src="{{asset('storage/'.$product['image'])}}" style="object-fit: cover;"  alt="商品画像" width="200" height="400" ></div>
         </div>
         <div class="col-md-6">
             <div class="pl-3">
@@ -12,7 +12,7 @@
                     <div class="h2">￥{{$product->price}}</div>
                     <div class="h5">　税込</div>
                 </div>
-                @if($product->orders->sum('amount') < $product->stock) 
+                @if($product->orders->where('status_id', 2)->sum('amount') < ($product->stock)) 
                 <form action="{{ route('add_cart',['product' => $product['id']])}}" method="post">
                     @csrf
                     <div class="mt-4 d-flex">

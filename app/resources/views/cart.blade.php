@@ -12,7 +12,7 @@
     <div class="col mb-4">
         <div class="bg-white d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-between align-items-center ml-4">
-                    <img class="d-block mx-auto" src="{{ asset('storage/'.$order->product['image']) }}" alt="商品画像" width="80" height="160" >
+                    <img class="d-block mx-auto" style="object-fit: cover;" src="{{ asset('storage/'.$order->product['image']) }}" alt="商品画像" width="80" height="160" >
                     <div class="text-dark ml-5">{{$order->product->name}}</div>
                 </div>
                 
@@ -41,7 +41,7 @@ foreach($orders as $order){
         </div>円
     </div>
         <div class="d-flex align-items-center">
-            <div><a class="" href="{{ route('search_product') }}"><button type="submit" class="btn btn-dark">{{ __('　　買い物を続ける　　') }}</button></a></div>
+            <div><a class="" href="{{ 'product'}}"><button type="submit" class="btn btn-dark">{{ __('　　買い物を続ける　　') }}</button></a></div>
             <div><a class="ml-3" href="{{ route('address') }}"><button type="submit" class="btn btn-dark">{{ __('　　購入手続き　　') }}</button></a></div>
         </div>
     </div>

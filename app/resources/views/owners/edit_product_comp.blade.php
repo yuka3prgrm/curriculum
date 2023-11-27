@@ -4,7 +4,7 @@
     <div class="h4 text-center">商品編集完了　{{$status}}</div>
     <div class="d-flex justify-content-center">
         <div class="col-md-6">
-            <div class="text-right mr-5"><img class="text-right" src="{{ asset('storage/'.$product['image']) }}" alt="商品画像" width="200" height="400" ></div>
+            <div class="text-right mr-5"><img class="text-right" src="{{ asset('storage/'.$product['image']) }}" style="object-fit: cover;"  alt="商品画像" width="200" height="400" ></div>
         </div>
         <div class="col-md-6">
             <div class="pl-3">
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="mt-3 d-flex justify-content-center">
-        <a class="mr-3" href="{{  route('edit_product',['product' => $product['id']])}}"><button type="submit" class="btn btn-dark">再編集する</button></a>
+        <a class="mr-3" href="{{ '/product/' . $product->id . '/edit' }}"><button type="submit" class="btn btn-dark">再編集する</button></a>
 
         <a class="ml-3" href="{{ route('ownerpage')}}"><button type="submit" class="btn btn-dark">管理者ページへ戻る</button></a>
     </div>

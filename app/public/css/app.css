@@ -10932,9 +10932,7 @@ a.text-dark:focus {
 }
 
 .liked{
-  color:red;
-}
+  text-decoration: none;
+  
 
-.unliked{
-  color:grey;
 }

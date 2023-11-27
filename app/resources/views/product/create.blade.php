@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
-<div class="text-center">商品登録ページ</div>
-<form action="{{ route('post_product')}}" method="post" enctype="multipart/form-data">
+<div class="text-center h4">商品登録ページ</div>
+<form action="{{ route('product.store')}}" method="post" enctype="multipart/form-data">
 @csrf
     <div class="form-group row">
         <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('商品写真') }}</label>

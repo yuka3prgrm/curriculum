@@ -16,14 +16,14 @@ use Carbon\Carbon;
 
 class DisplayController extends Controller
 {
-    public function index(Request $request){
+    public function home(Request $request){
         if(Auth::check()){
             if(Auth::user()->authority_flg == 0){
                 return redirect ("/ownerpage");
             }
         }
         $user =Auth::User();
-        $products = Product::latest()->take(4)->orderBy('id', 'desc')->get();
+        $products = Product::latest()->where('hidden_flg', 0)->where('del_flg', 0)->take(4)->orderBy('id', 'desc')->get();
         $like_model = new Like;
 
 
@@ -159,73 +159,6 @@ class DisplayController extends Controller
         ]);
     }
 
-
-    public function searchProduct(Request $request){
-        if(Auth::check()){
-            if(Auth::user()->authority_flg == 0){
-                return redirect ("/ownerpage");
-            }
-        }
-        $user = new User;
-        $product = new Product;
-        $like_model = new Like;
-        
-        $limit = $request->input('limit');
-        $keyword = $request->input('keyword');
-        $lower =0;
-        $upper =999999999;
-        if($limit == 1){
-            $lower =0;
-            $upper =1000;
-        }elseif($limit ==2){
-            $lower =1000;
-            $upper =3000;
-        }elseif($limit == 3){
-            $lower =3000;
-            $upper =5000;
-        }elseif($limit == 4){
-            $lower =5000;
-            $upper =10000;
-        }
-
-        $products = $product->orderBy('id', 'desc');
-
-        if (!empty($keyword)) {
-            $products->where(function ($query) use ($keyword) {
-                $query->where('name', 'LIKE', "%{$keyword}%")
-                    ->orWhere('introduction', 'LIKE', "%{$keyword}%");
-            });
-        }
-
-        if ($limit !== 0) {
-            $products->whereBetween('price', [$lower, $upper]);
-        }
-    
-        $products = $products->paginate(8);
-
-        return view("/search_product",[
-            "user"=>$user,
-            "products"=> $products,
-            "limit" =>$limit,
-            "keyword" =>$keyword,
-            'like_model'=>$like_model
-        ]);
-    }
-
-    public function showProduct(Product $product){
-        if(Auth::check()){
-            if(Auth::user()->authority_flg == 0){
-                return redirect ("/ownerpage");
-            }
-        }
-        $reviews = Review::with("product")->where('product_id', $product->id)->get();
-
-        return view("/show_product",[
-            "product"=>$product,
-            "reviews"=>$reviews,
-            
-        ]);
-    }
 
     public function postReviewConf(Product $product){
         if(Auth::user()->authority_flg == 0){

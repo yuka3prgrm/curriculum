@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-center align-items-center">
-        <div class="pr-5"><img src="{{asset('storage/'.$product['image'])}}" alt="商品画像"width="80" height="160" ></div>
+        <div class="pr-5"><img src="{{asset('storage/'.$product['image'])}}" style="object-fit: cover;" alt="商品画像"width="80" height="160" ></div>
         <div class="pl-5 h4">{{$product->name}}</div>
     </div>
 <div class="text-center pt-5 h5">{{"レビュー投稿"}}</div>

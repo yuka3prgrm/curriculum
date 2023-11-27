@@ -6,11 +6,12 @@
         {{"商品編集ページ"}}
     </div>
 </div>
-<form action="{{ route('edit_product',['product' => $product['id']])}}" method="post">
+<form action="{{ route('product.update', ['product' => $product->id])}}" method="post">
 @csrf
+@method('PUT')
     <div class="form-group row">
         <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('商品写真') }}</label>
-        <img class="d-block ml-5" src="{{ asset('storage/'.$product['image']) }}" alt="商品画像" width="80" height="160" >
+        <img class="d-block ml-5" src="{{ asset('storage/'.$product['image']) }}" style="object-fit: cover;"  alt="商品画像" width="80" height="160" >
     </div>
 
     <div class="form-group row">
@@ -81,8 +82,9 @@
                         </div>
                     </form>
                 @endif
-                <form action="{{ route('delete_product',['product' => $product['id']])}}" method="post">
+                <form action="{{ route('product.destroy', ['product' => $product->id]) }}" method="post">
                     @csrf
+                    @method('DELETE')
                     <div class="">
                         <button type="submit" class="ml-5 btn btn-dark">
                             {{ __('　　商品削除　　') }}

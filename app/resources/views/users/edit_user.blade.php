@@ -38,10 +38,24 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('パスワード') }}</label>
+                        <label for="current_password" class="col-md-4 col-form-label text-md-right">{{ __('現在のパスワード') }}</label>
 
                         <div class="col-md-6">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ $user->password }}" required autocomplete="new-password">
+                            <input id="current_password" type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password"  required autocomplete="current_password">
+
+                            @error('current_password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('新しいパスワード') }}</label>
+
+                        <div class="col-md-6">
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password"  required autocomplete="password">
 
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -52,12 +66,19 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('パスワード再入力') }}</label>
+                        <label for="confirm_password" class="col-md-4 col-form-label text-md-right">{{ __('新しいパスワード確認用') }}</label>
 
                         <div class="col-md-6">
-                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" value="{{ $user->password }}" required autocomplete="new-password">
+                            <input id="confirm_password" type="password" class="form-control @error('confirm_password') is-invalid @enderror" name="confirm_password"  required autocomplete="confirm_password">
+
+                            @error('confirm_password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                     </div>
+
                     <div class="d-flex justify-content-center">
                         <div class="col-md-8 d-flex justify-content-around">
                             <div class=" ">

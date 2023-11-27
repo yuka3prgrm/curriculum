@@ -15,7 +15,10 @@
         <div class="bg-white shadow p-3  bg-body-tertiary rounded h-100 position-relative ">
             <a class="" href="{{ route('show_product',['product' => $like->product->id]) }}">
                 <div class="position-relative d-block mx-auto">
-                    <img class="d-block mx-auto" src="{{ asset('storage/'.$like->product['image']) }}" alt="商品画像" width="120" height="240" >
+                    <img class="d-block mx-auto" style="object-fit: cover;" src="{{ asset('storage/'.$like->product['image']) }}" alt="商品画像" width="120" height="240" >
+                    @if($like->product->orders->where('status_id', 2)->sum('amount') >= ($like->product->stock))
+                        <img class=" mt-3 card-img-overlay mx-auto" src="{{ asset('image/soldout.png') }}" alt="商品画像" width="160" height="240" >
+                    @endif
                 </div>
                 <div class="ml-3 mb-3">
                     <div class="text-dark">{{$like->product->name}}</div>
@@ -26,7 +29,7 @@
                 <form action="{{ route('delete_like',['like' => $like['id']]) }}" method="post">
                 @csrf
 
-                <button type="submit" class="btn btn-link"><p class="liked h1 mt-5">❤</p></button>
+                <button type="submit" class="" style="text-decoration: none; color: red; cursor: pointer; border: none; background: none;"><p class="h1 mt-5"  >❤</p></button>
                 </form>
             </div>
         </div>

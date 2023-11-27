@@ -14,7 +14,7 @@
         <div class=" d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-between align-items-center ml-4">
                     <div class="text-dark">{{$order->updated_at->format('Y-m-d')}}</div>
-                    <img class="d-block mx-auto" src="{{ asset('storage/'.$order->product['image']) }}" alt="商品画像" width="80" height="160" >
+                    <img class="d-block mx-auto" src="{{ asset('storage/'.$order->product['image']) }}" style="object-fit: cover;"  alt="商品画像" width="80" height="160" >
                     <div class="text-dark ml-5">{{$order->product->name}}</div>
                 </div>
                 
@@ -22,7 +22,7 @@
                 <div class="text-dark">{{$order->amount}}</div>
                 <div div class="text-center mr-3">
                     <div class="mb-1">
-                        <a  href="{{ route('show_product',['product' => $order->product['id']]) }}"><button type="submit" class="btn btn-dark">{{ __('　　再購入　　') }}</button></a>
+                        <a  href="{{ '/product/' . $order->product->id }}"><button type="submit" class="btn btn-dark">{{ __('　　再購入　　') }}</button></a>
                     </div>
                     <div class="mt-1">
                         <a  href="{{ route('post_review',['product' => $order->product['id']]) }}"><button type="submit" class="btn btn-dark">レビューを書く</button></a>

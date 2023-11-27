@@ -13,64 +13,11 @@ use App\Address;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Hash;
 
 class RegistrationController extends Controller
 {
-    //管理者ページ
-    public function postProduct(){
-        if(Auth::user()->authority_flg == 1){
-            return redirect ("/");
-        }
 
-        return view("owners/post_product",[
-            
-        ]);
-    }
-
-    public function createProduct(Request $request){
-        if(Auth::user()->authority_flg == 1){
-            return redirect ("/");
-        }
-
-        $product = new Product;
-
-        $img = $request->file('image');
-        $path = $img->store('img','public');
-        $product->image = $path;
-        $columns =["name","price","introduction","stock"];
-        foreach($columns as $column){
-            $product->$column = $request->$column;
-        }
-
-        $product->save();
-
-        return redirect("/post_product_comp");
-    }
-
-    public function editProductForm(Product $product){
-        if(Auth::user()->authority_flg == 1){
-            return redirect ("/");
-        }
-
-        return view("owners/edit_product",[
-            "product"=>$product
-        ]);
-    }
-
-    public function editProduct(Product $product, Request $request){
-        if(Auth::user()->authority_flg == 1){
-            return redirect ("/");
-        }
-
-        $columns =["name","price","introduction","stock"];
-        foreach($columns as $column){
-            $product->$column = $request->$column;
-        }
-        
-        $product->save();
-
-        return redirect("/edit_product_comp");
-    }
     public function hiddenProduct(Product $product, Request $request){
         if(Auth::user()->authority_flg == 1){
             return redirect ("/");
@@ -95,17 +42,6 @@ class RegistrationController extends Controller
         return redirect("/edit_product_comp");
     }
 
-    public function deleteProduct(Product $product){
-        if(Auth::user()->authority_flg == 1){
-            return redirect ("/");
-        }
-
-        $product->del_flg = 1;
-
-        $product->save();
-
-        return redirect("/ownerpage");
-    }
 
     public function postReviewForm(Product $product){
         if(Auth::user()->authority_flg == 0){
@@ -152,7 +88,7 @@ class RegistrationController extends Controller
 
         $order->save();
 
-        return redirect()->route("show_product", ['product' => $productId]);
+        return redirect()->route("product.show", ['product' => $productId]);
     }
 
     public function delCart(Order $order){
@@ -231,15 +167,23 @@ class RegistrationController extends Controller
         if(Auth::user()->authority_flg == 0){
             return redirect ("/ownerpage");
         }
-
-        $columns =["name","email","password"];
-        foreach($columns as $column){
-            $user->$column = $request->$column;
-        }
+        $userId = Auth::user()->id;
+        $pass = $request->current_password;
         
-        $user->save();
+        $password =Auth::user()->password;
+        if(Hash::check($pass, $password)){
 
-        return redirect("/edit_user_conf");
+            $columns =["name","email"];
+            foreach($columns as $column){
+                $user->$column = $request->$column;
+            }
+            $user->password = bcrypt($request->password);
+            
+            $user->save();
+            return redirect("/edit_user_conf");
+        }
+        return redirect()->route("edit_user", ['user' => $userId]);
+        
     }
 
     public function deleteUserForm(){

@@ -22,11 +22,11 @@ use Illuminate\Support\Facades\Password;
 // });
 
 Auth::routes();
-
-Route::get('/', [DisplayController::class, "index"])->name('/');
+Route::resource('/product', 'ProductController');
+Route::get('/', [DisplayController::class, "home"])->name('/');
 Route::get("/search_product",[DisplayController::class,"searchProduct"])->name("search_product");
-Route::get("/show_product/{product}",[DisplayController::class,"showProduct"])->name("show_product");
-Route::post("/show_product/{product}",[RegistrationController::class,"productToCart"]);
+// Route::get("/show_product/{product}",[DisplayController::class,"showProduct"])->name("show_product");
+Route::post("/show_product/{product}",[RegistrationController::class,"productToCart"])->name("show_product");
 
 Route::group(["middleware" => "auth"],function(){
     Route::get("/post_review/{product}",[RegistrationController::class,"postReviewForm"])->name("post_review");
@@ -54,16 +54,15 @@ Route::group(["middleware" => "auth"],function(){
 
   
     Route::get("/ownerpage",[DisplayController::class,"ownerPage"])->name("ownerpage");
-    Route::get("/post_product",[RegistrationController::class,"postProduct"])->name("post_product");
-    Route::post("/post_product",[RegistrationController::class,"createProduct"]);
+    // Route::get("/post_product",[RegistrationController::class,"postProduct"])->name("post_product");
+    // Route::post("/post_product",[RegistrationController::class,"createProduct"]);
     Route::get("/post_product_comp",[DisplayController::class,"postProductComp"])->name("post_product_comp");
-    Route::get("/edit_product/{product}",[RegistrationController::class,"editProductForm"])->name("edit_product");
-    Route::post("/edit_product/{product}",[RegistrationController::class,"editProduct"]);
+    // Route::get("/edit_product/{product}",[RegistrationController::class,"editProductForm"])->name("edit_product");
+    // Route::post("/edit_product/{product}",[RegistrationController::class,"editProduct"]);
     Route::get("/edit_product_comp",[DisplayController::class,"editProductComp"])->name("edit_product_comp");
     Route::post("/hidden_product/{product}",[RegistrationController::class,"hiddenProduct"])->name("hidden_product");
     Route::post("/hidden_product2/{product}",[RegistrationController::class,"hiddenProduct2"])->name("hidden_product2");
-    Route::post("/delete_product/{product}",[RegistrationController::class,"deleteProduct"])->name("delete_product");
-    Route::post("/edit_product/{product}",[RegistrationController::class,"editProduct"]);
+    // Route::post("/delete_product/{product}",[RegistrationController::class,"deleteProduct"])->name("delete_product");
     Route::get("/user_list",[DisplayController::class,"userList"])->name("user_list");
     Route::get("/owner_order_list",[DisplayController::class,"ownerOrderList"])->name("owner_order_list");
 });
