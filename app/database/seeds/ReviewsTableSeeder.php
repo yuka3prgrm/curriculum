@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class ReviewsTableSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class ReviewsTableSeeder extends Seeder
     {
         $params = [
             [
-                "title"      => 大満足です,
+                "title"      => '大満足です',
                 "comment"    => "１か月前に購入させてもらいました。着心地がよく、使いまわしもできるので重宝しています♪",
                 "del_flg"    => "0",
                 "user_id"    => 2,
@@ -22,7 +23,7 @@ class ReviewsTableSeeder extends Seeder
                 "updated_at" => Carbon::now(),
             ],
             [
-                "title"      => 大満足です,
+                "title"      => '大満足です',
                 "comment"    => "１か月前に購入させてもらいました。着心地がよく、使いまわしもできるので重宝しています♪",
                 "del_flg"    => "0",
                 "user_id"    => 3,
