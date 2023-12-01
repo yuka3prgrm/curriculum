@@ -13,7 +13,7 @@
 @foreach($likes as $like)
     <div class="col mb-4">
         <div class="bg-white shadow p-3  bg-body-tertiary rounded h-100 position-relative ">
-            <a class="" href="{{ route('show_product',['product' => $like->product->id]) }}">
+            <a class="" href="{{ '/product/' . $like->product->id }}">
                 <div class="position-relative d-block mx-auto">
                     <img class="d-block mx-auto" style="object-fit: cover;" src="{{ asset('storage/'.$like->product['image']) }}" alt="商品画像" width="120" height="240" >
                     @if($like->product->orders->where('status_id', 2)->sum('amount') >= ($like->product->stock))
